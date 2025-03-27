@@ -38,10 +38,40 @@ async function fetchStellarTokenPrices(tokenIds = []) {
     
     for (const [tokenId, priceData] of Object.entries(response.data)) {
       console.log(`\n${tokenId.toUpperCase()}:`);
-      console.log(`  USD: $${priceData.usd.toLocaleString()} (24h: ${priceData.usd_24h_change.toFixed(2)}%)`);
-      console.log(`  EUR: €${priceData.eur.toLocaleString()} (24h: ${priceData.eur_24h_change.toFixed(2)}%)`);
-      console.log(`  BTC: ₿${priceData.btc.toFixed(8)}`);
-      console.log(`  Market Cap: $${priceData.usd_market_cap.toLocaleString()}`);
+      
+      // Safely display USD price with change (if available)
+      if (priceData.usd !== undefined) {
+        const usdChange = priceData.usd_24h_change !== undefined && priceData.usd_24h_change !== null
+          ? `(24h: ${priceData.usd_24h_change.toFixed(2)}%)`
+          : '(24h change unavailable)';
+        console.log(`  USD: $${priceData.usd.toLocaleString()} ${usdChange}`);
+      } else {
+        console.log('  USD: Data unavailable');
+      }
+      
+      // Safely display EUR price with change (if available)
+      if (priceData.eur !== undefined) {
+        const eurChange = priceData.eur_24h_change !== undefined && priceData.eur_24h_change !== null
+          ? `(24h: ${priceData.eur_24h_change.toFixed(2)}%)`
+          : '(24h change unavailable)';
+        console.log(`  EUR: €${priceData.eur.toLocaleString()} ${eurChange}`);
+      } else {
+        console.log('  EUR: Data unavailable');
+      }
+      
+      // Safely display BTC price (if available)
+      if (priceData.btc !== undefined) {
+        console.log(`  BTC: ₿${priceData.btc.toFixed(8)}`);
+      } else {
+        console.log('  BTC: Data unavailable');
+      }
+      
+      // Safely display market cap (if available)
+      if (priceData.usd_market_cap !== undefined) {
+        console.log(`  Market Cap: $${priceData.usd_market_cap.toLocaleString()}`);
+      } else {
+        console.log('  Market Cap: Data unavailable');
+      }
     }
     
     // For a specific token lookup by symbol, we'd need to use the /coins/list endpoint first
@@ -51,6 +81,9 @@ async function fetchStellarTokenPrices(tokenIds = []) {
     console.error('Error fetching Stellar token prices:', error.message);
     if (error.response && error.response.status === 429) {
       console.error('API rate limit exceeded. Please try again later.');
+    } else if (error.response) {
+      console.error('API Response Status:', error.response.status);
+      console.error('API Response Data:', JSON.stringify(error.response.data).substring(0, 200));
     }
     throw error;
   }

@@ -12,33 +12,72 @@ async function fetchStellarVolume(days = 1) {
     
     // Filter for protocols on Stellar chain
     const stellarDexes = response.data.protocols.filter(protocol => 
-      protocol.chains.includes('Stellar')
+      protocol.chains && protocol.chains.includes('Stellar')
     );
     
-    // Calculate total volume for specified days
+    // Debug the API response structure
+    console.log('API Response Structure Example:');
+    if (stellarDexes.length > 0) {
+      console.log(JSON.stringify(stellarDexes[0], null, 2).substring(0, 500) + '...');
+    }
+    
+    // Calculate total volume with proper property checking
     const totalVolume = stellarDexes.reduce((sum, dex) => {
-      // Get volume for the specified time period
-      return sum + (dex.volumeChange.dailyVolume || 0);
+      // Safely access nested properties
+      const dailyVolume = dex.volumeChange && dex.volumeChange.dailyVolume ? 
+                          dex.volumeChange.dailyVolume : 
+                          (dex.volume1d || dex.total24h || dex.dailyVolume || 0);
+      return sum + dailyVolume;
     }, 0);
     
     console.log('Stellar DEXes:', stellarDexes.map(dex => ({
       name: dex.name,
-      dailyVolume: `$${(dex.volumeChange.dailyVolume || 0).toLocaleString()}`
+      dailyVolume: `$${(
+        (dex.volumeChange && dex.volumeChange.dailyVolume) || 
+        dex.volume1d || 
+        dex.total24h || 
+        dex.dailyVolume || 
+        0
+      ).toLocaleString()}`
     })));
     
     console.log(`\nTotal ${days}-day volume on Stellar: $${totalVolume.toLocaleString()}`);
     
-    // For historical volume data, we'd need to query each DEX individually
+    // For historical volume data, check if there are any DEXes first
     if (stellarDexes.length > 0) {
       console.log('\nFetching historical data for the largest DEX...');
-      const largestDex = stellarDexes.reduce((max, dex) => 
-        (dex.volumeChange.dailyVolume > max.volumeChange.dailyVolume) ? dex : max, 
-        stellarDexes[0]
-      );
       
-      // Get historical data for largest DEX
-      const historicalData = await axios.get(`https://api.llama.fi/summary/dexs/${largestDex.slug}?dataType=dailyVolume`);
-      console.log(`${largestDex.name} 7-day volume trend:`, historicalData.data.totalDataChart.slice(-7));
+      // Find the largest DEX with proper property checking
+      const largestDex = stellarDexes.reduce((max, dex) => {
+        const currentVolume = (dex.volumeChange && dex.volumeChange.dailyVolume) || 
+                             dex.volume1d || 
+                             dex.total24h || 
+                             dex.dailyVolume || 
+                             0;
+        const maxVolume = (max.volumeChange && max.volumeChange.dailyVolume) || 
+                         max.volume1d || 
+                         max.total24h || 
+                         max.dailyVolume || 
+                         0;
+                         
+        return currentVolume > maxVolume ? dex : max;
+      }, stellarDexes[0]);
+      
+      if (largestDex.slug) {
+        try {
+          // Get historical data for largest DEX
+          const historicalData = await axios.get(`https://api.llama.fi/summary/dexs/${largestDex.slug}?dataType=dailyVolume`);
+          if (historicalData.data && historicalData.data.totalDataChart) {
+            console.log(`${largestDex.name} 7-day volume trend:`, historicalData.data.totalDataChart.slice(-7));
+          } else {
+            console.log(`Historical data not available in expected format for ${largestDex.name}`);
+          }
+        } catch (error) {
+          console.log(`Could not fetch historical data: ${error.message}`);
+        }
+      } else {
+        console.log('No slug property found for the largest DEX, cannot fetch historical data');
+      }
     }
     
     return {
@@ -47,6 +86,11 @@ async function fetchStellarVolume(days = 1) {
     };
   } catch (error) {
     console.error('Error fetching Stellar volume:', error.message);
+    // Print more details for debugging
+    if (error.response) {
+      console.error('API Response Status:', error.response.status);
+      console.error('API Response Data:', error.response.data);
+    }
     throw error;
   }
 }
