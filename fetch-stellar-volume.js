@@ -1,6 +1,9 @@
 // Script to fetch trading volume for Stellar blockchain
 const axios = require('axios');
 
+// Add this at the start of the file to help debug
+const DEBUG = true;
+
 /**
  * Fetches total trading volume data for Stellar blockchain from DeFiLlama API
  * @param {number} days Number of days to look back for volume data (default: 1)
@@ -23,11 +26,15 @@ async function fetchStellarVolume(days = 1) {
     
     // Calculate total volume with proper property checking
     const totalVolume = stellarDexes.reduce((sum, dex) => {
-      // Safely access nested properties
-      const dailyVolume = dex.volumeChange && dex.volumeChange.dailyVolume ? 
-                          dex.volumeChange.dailyVolume : 
-                          (dex.volume1d || dex.total24h || dex.dailyVolume || 0);
-      return sum + dailyVolume;
+      if (DEBUG) {
+        console.log('Processing DEX:', dex.name, dex);
+      }
+      // More defensive property access
+      const volume = dex?.volumeChange?.dailyVolume ?? 
+                    dex?.volume1d ?? 
+                    dex?.total24h ?? 
+                    0;
+      return sum + volume;
     }, 0);
     
     console.log('Stellar DEXes:', stellarDexes.map(dex => ({
@@ -78,6 +85,10 @@ async function fetchStellarVolume(days = 1) {
       } else {
         console.log('No slug property found for the largest DEX, cannot fetch historical data');
       }
+    }
+    
+    if (DEBUG) {
+      console.log('API Response:', JSON.stringify(response.data, null, 2));
     }
     
     return {
