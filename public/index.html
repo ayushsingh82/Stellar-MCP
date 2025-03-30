@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Onchain Mantle MPC</title>
+    <title>Onchain Stellar MPC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
@@ -14,50 +12,32 @@
     <style>
       body {
         font-family: "Space Grotesk", sans-serif;
-        background: linear-gradient(to bottom right, #0a0a0a, #1a1a1a);
+        background: #0A0A0A;
       }
       .glass {
-        background: rgba(26, 26, 26, 0.4);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
       .protocol-card {
-        background: rgba(26, 26, 26, 0.4);
+        background: rgba(255, 255, 255, 0.02);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.05);
         transition: all 0.3s ease;
       }
       .protocol-card:hover {
         transform: translateY(-2px);
-        background: rgba(38, 38, 38, 0.6);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #29ABE2;
       }
-      .gradient-border {
+      .accent-border {
         position: relative;
         border-radius: 1rem;
-        background: linear-gradient(
-          45deg,
-          rgba(59, 130, 246, 0.5),
-          rgba(147, 51, 234, 0.5)
-        );
-        padding: 1px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.02);
       }
-      .gradient-border::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 1rem;
-        padding: 1px;
-        background: linear-gradient(
-          45deg,
-          rgba(59, 130, 246, 0.3),
-          rgba(147, 51, 234, 0.3)
-        );
-        -webkit-mask: linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
+      .accent-border:hover {
+        border-color: #29ABE2;
       }
     </style>
   </head>
@@ -67,28 +47,25 @@
     <div class="max-w-6xl w-full mx-auto relative">
       <!-- Decorative elements -->
       <div
-        class="absolute -top-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
+        class="absolute -top-40 -left-40 w-80 h-80 bg-[#29ABE2]/5 rounded-full blur-3xl"
       ></div>
       <div
-        class="absolute -bottom-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"
+        class="absolute -bottom-40 -right-40 w-80 h-80 bg-[#29ABE2]/5 rounded-full blur-3xl"
       ></div>
 
       <div class="text-center mb-16 relative">
         <div
           class="inline-flex items-center gap-2 mb-4 glass px-4 py-2 rounded-full"
         >
-          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          <span class="text-sm font-medium text-gray-300"
-            >Live on Mantle Network</span
+          <div class="w-2 h-2 bg-[#29ABE2] rounded-full animate-pulse"></div>
+          <span class="text-sm font-medium text-white/80"
+            >Live on Stellar Network</span
           >
         </div>
 
         <h1 class="text-7xl font-bold mb-6 tracking-tight">
           Onchain
-          <span
-            class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
-            >MANTLE</span
-          >
+          <span class="text-[#29ABE2]">Stellar</span>
           MCP SERVER
         </h1>
 
@@ -97,7 +74,7 @@
         >
           Connect this mpc server to cursor, claude, t3chat or your preferred ai
           workspace to discuss your DeFi strategies with real-time data from
-          Mantle's leading protocols.
+          Stellar's leading protocols.
         </p>
       </div>
 
@@ -110,7 +87,7 @@
             Supported Protocols
           </h2>
           <div class="space-y-6 relative">
-            <div class="gradient-border">
+            <div class="accent-border">
               <a
                 href="https://defillama.com/protocol/treehouse-protocol"
                 target="_blank"
@@ -139,17 +116,17 @@
                     <h3
                       class="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors"
                     >
-                      Treehouse Protocol
+                    LUMENSWAP Protocol
                     </h3>
                     <p class="text-gray-400 mt-1">
-                      Leading lending protocol on Mantle
+                      Leading lending protocol on Stellar
                     </p>
                   </div>
                 </div>
               </a>
             </div>
 
-            <div class="gradient-border">
+            <div class="accent-border">
               <a
                 href="https://defillama.com/protocol/merchant-moe"
                 target="_blank"
@@ -178,9 +155,9 @@
                     <h3
                       class="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors"
                     >
-                      Merchant Moe
+                    FxDAO
                     </h3>
-                    <p class="text-gray-400 mt-1">Innovative DEX on Mantle</p>
+                    <p class="text-gray-400 mt-1">Innovative DEX on Stellar</p>
                   </div>
                 </div>
               </a>
@@ -214,7 +191,7 @@
               <div>
                 <h3 class="font-medium mb-1">Real-time Token Prices</h3>
                 <p class="text-sm text-gray-400">
-                  Live price updates from Mantle Network
+                  Live price updates from Stellar Network
                 </p>
               </div>
             </div>
@@ -299,6 +276,37 @@
   }
 }</code></pre>
       </div>
+
+      <!-- New box for Claude setup command -->
+      <div class="glass rounded-3xl p-8 mt-8 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-6 relative">
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-[#FF5F57]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#28C840]"></div>
+          </div>
+          <div class="text-sm text-gray-500 font-mono">Try with Claude</div>
+        </div>
+        <pre class="text-sm bg-[#0A0A0A] rounded-2xl p-6 overflow-x-auto font-mono relative">
+<code class="text-gray-300">npx @composio/mcp@latest setup "https://agent.mcpify.ai/sse?server=adc7aab6-0073-47f7-b42a-c7cd0c431ab3" --client claude</code></pre>
+        <button onclick="copyToClipboard(this)" class="absolute top-[90px] right-12 px-3 py-1.5 text-xs font-medium text-white/80 hover:text-white bg-[#29ABE2]/10 hover:bg-[#29ABE2]/20 rounded-lg transition-colors">
+          Copy
+        </button>
+      </div>
+
+      <script>
+        function copyToClipboard(button) {
+          const command = 'npx @composio/mcp@latest setup "https://agent.mcpify.ai/sse?server=adc7aab6-0073-47f7-b42a-c7cd0c431ab3" --client claude';
+          navigator.clipboard.writeText(command);
+          
+          // Change button text temporarily
+          const originalText = button.textContent;
+          button.textContent = 'Copied!';
+          setTimeout(() => {
+            button.textContent = originalText;
+          }, 2000);
+        }
+      </script>
     </div>
   </body>
 </html>

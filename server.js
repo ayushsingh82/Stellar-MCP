@@ -8,7 +8,7 @@ app.use(express.static('public'));
 // Routes for API endpoints
 app.get('/api/prices', async (req, res) => {
   try {
-    const { fetchStellarTokenPrices } = require('./fetch-stellar-prices');
+    const { fetchStellarTokenPrices } = require('./lib/fetch-stellar-prices');
     const prices = await fetchStellarTokenPrices();
     res.json(prices);
   } catch (error) {
@@ -18,7 +18,7 @@ app.get('/api/prices', async (req, res) => {
 
 app.get('/api/volume', async (req, res) => {
   try {
-    const { fetchStellarVolume } = require('./fetch-stellar-volume');
+    const { fetchStellarVolume } = require('./lib/fetch-stellar-volume');
     const volume = await fetchStellarVolume();
     res.json(volume);
   } catch (error) {
@@ -28,7 +28,7 @@ app.get('/api/volume', async (req, res) => {
 
 app.get('/api/tvl', async (req, res) => {
   try {
-    const { fetchStellarTVL } = require('./fetch-stellar-tvl');
+    const { fetchStellarTVL } = require('./lib/fetch-stellar-tvl');
     const tvl = await fetchStellarTVL();
     res.json(tvl);
   } catch (error) {
